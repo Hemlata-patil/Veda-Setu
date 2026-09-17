@@ -1,111 +1,286 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# VEDA SETU (वेद सेतु)
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+> **National Digital Platform for AYUSH Academia-Industry Integration, Skill Assessment & Talent Governance**
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+VEDA SETU connects Ayurvedic academic institutions, students, faculty mentors, industry partners, and regulatory administrators into a unified, secure digital ecosystem.
 
-## Features
+---
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## 🏛 Architecture
 
-## Demo
+VEDA SETU operates on a decoupled full-stack architecture:
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Next.js Frontend                         │
+│   • App Router with Turbopack, React 19 & TypeScript        │
+│   • Server Components, Server Actions & Proxy Routing       │
+│   • Tailwind CSS & shadcn/ui Design System                  │
+└──────────────────────────────┬──────────────────────────────┘
+                               │  HTTP / REST API (JSON)
+                               │  HttpOnly `auth_token` Cookie & Bearer Tokens
+┌──────────────────────────────▼──────────────────────────────┐
+│           Node.js + Express + TypeScript REST API           │
+│   • Authoritative Security & Business Logic Boundary        │
+│   • Pure JWT Authentication & Role-Based Access Control     │
+│   • Cryptographic Password Reset (SHA-256)                  │
+│   • Pluggable Storage Abstraction (Private Local / S3)      │
+└──────────────────────────────┬──────────────────────────────┘
+                               │  pg (Node-Postgres Connection Pool)
+┌──────────────────────────────▼──────────────────────────────┐
+│                    PostgreSQL Database                      │
+│   • Database Name: `veda_setu`                              │
+│   • Relational Schema with Multi-Tenant Foreign Keys        │
+│   • ACID Transactions & Cascade Deletion Safety             │
+└─────────────────────────────────────────────────────────────┘
+```
 
-## Deploy to Vercel
+---
 
-Vercel deployment will guide you through creating a Supabase account and project.
+## 👥 Platform Roles & Portals
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+VEDA SETU enforces role boundaries across 5 core roles:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+| Role | Portal Path | Core Features |
+|---|---|---|
+| **`student`** | `/student/*` | Skill Assessment Engine (26 questions across 13 competencies), Personalized Learning Pathways, Opportunity Discovery & Application Tracker, Same-Institution Mentorship Requests, Internship & Placement Progress Tracking (0–100%), Digital Portfolio with secure signed document streaming. |
+| **`faculty`** | `/faculty/*` | Departmental Student Roster, Mentorship Intake Pipeline with Private Guidance Notes, Inter-Institutional Research Collaboration Hub with Statement of Interest Reviews. |
+| **`institution`** | `/institution/*` | Campus Academic Dashboard, Cohort Competency Analytics, Student Registry, Faculty Onboarding & Management, Placement Oversight. |
+| **`industry`** | `/industry/*` | Clinical & Industrial Opportunity Authoring (Internships, Clinical Research, Jobs), Candidate Application Review State Machine, Internship & Placement Tracking. |
+| **`super_admin`** | `/super-admin/*` | Platform Governance, Academic Institution & Industry Partner Verification/Suspension, User Roster & Role Administration, System-wide Analytics. |
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+---
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+## 🧠 Skill Assessment & Scoring Model
 
-## Clone and run locally
+The student competency engine evaluates candidates through validated assessment templates:
+- **Structure:** 1 published assessment template featuring **26 questions total** (13 Multiple Choice Questions + 13 Self-Rating Questions) evaluating **13 core Ayurvedic competencies**.
+- **MCQ Scoring:** Correct answer = 100 points, Incorrect answer = 0 points.
+- **Self-Rating Scale:** 5-point scale mapped linearly: $1 \rightarrow 20$, $2 \rightarrow 40$, $3 \rightarrow 60$, $4 \rightarrow 80$, $5 \rightarrow 100$.
+- **Competency Score Formula:**
+  $$\text{Competency Score} = \text{round}(0.8 \times \text{MCQ Score} + 0.2 \times \text{Self-Rating Score})$$
+- **Overall Score:** Rounded arithmetic mean of all 13 competency scores.
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+---
 
-2. Create a Next.js app using the Supabase Starter template npx command
+## 🔄 Opportunity & Placement State Machines
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+### Application Lifecycle
+Applications transition through the following states:
+```
+applied ──► under_review ──► shortlisted ──► selected
+   │              │               │             │
+   ▼              ▼               ▼             ▼
+withdrawn      rejected        rejected     withdrawn
+```
+- Valid statuses: `applied`, `under_review`, `shortlisted`, `rejected`, `selected`, `withdrawn`.
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+### Placement & Internship Lifecycle
+For candidates in `selected` status, industry partners initiate structured placement tracking:
+```
+selected ──► offer_accepted ──► joined ──► in_progress ──► completed
+   │
+   ▼
+withdrawn
+```
+- Valid statuses: `selected`, `offer_accepted`, `joined`, `in_progress`, `completed`, `withdrawn`.
+- Progress tracking: Validated numerical percentage between `0` and `100`.
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+---
 
-3. Use `cd` to change into the app's directory
+## 🔐 Authentication & Security
 
-   ```bash
-   cd with-supabase-app
-   ```
+- **Authoritative Boundary:** The Express backend (`/api/auth/*`) is the single source of truth for identity, authentication, and authorization.
+- **Session Tokens:** Stateless JSON Web Tokens (JWT) signed with HMAC-SHA256 (`JWT_SECRET`), transmitted via secure `HttpOnly` `auth_token` cookies and optional `Authorization: Bearer <token>` headers.
+- **Password Hashing:** Salted and hashed using `bcrypt` (10 salt rounds). Plaintext passwords and password hashes are never exposed in API responses.
+- **Password Reset Engine:** Cryptographically random single-use tokens (32 bytes) stored as SHA-256 hashes in `password_reset_tokens` with 1-hour expiration and replay prevention.
+- **Role Enforcement:** Server-side helpers (`requireAuth`, `requireRole`, `requireSuperAdmin`) and Express middleware (`authenticate`, `requireRole`) verify permissions on every request.
 
-4. Rename `.env.example` to `.env.local` and update the following:
+---
 
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+## 📦 Storage & Digital Portfolio
 
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+- **Storage Architecture:** Built on a pluggable storage interface (`IStorageService`) with an active local private disk provider (`LocalStorageService`).
+- **File Validation:** Enforces strict MIME type whitelisting (`application/pdf`, `image/jpeg`, `image/png`, `image/webp`) and a maximum file size limit of 5 MB.
+- **Secure Streaming:** Uploaded private documents are stored outside the public web root and served exclusively through authenticated routes or time-limited signed HMAC URLs (`/api/portfolio/documents/stream?token=...`).
+- **Atomic Operations:** Document replacements and deletions remove previous disk files and database metadata records atomically without leaving orphaned files.
 
-5. You can now run the Next.js local development server:
+---
 
-   ```bash
-   npm run dev
-   ```
+## 📋 Prerequisites
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+- **Node.js**: `v18.18.0` or higher (Node.js 20+ recommended)
+- **npm**: `v9.0.0` or higher
+- **PostgreSQL**: `v14` or higher (running locally on port `5432`)
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+---
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## ⚙️ Environment Configuration
 
-## Feedback and issues
+### Frontend Configuration (`.env.local`)
+Create `.env.local` in the project root:
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+```env
+# Backend REST API Base URL
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
 
-## More Supabase examples
+### Backend Configuration (`backend/.env`)
+Create `backend/.env` with your local PostgreSQL credentials:
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
-# Veda-Setu
-# Veda-Setu
+```env
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Frontend URL for CORS
+FRONTEND_URL=http://localhost:3000
+
+# PostgreSQL Database Connection
+DATABASE_URL=postgresql://postgres:your_password_here@localhost:5432/veda_setu
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=your_password_here
+DB_NAME=veda_setu
+DB_SSL=false
+
+# Authentication & Security (Minimum 32 characters)
+JWT_SECRET=your_super_secret_jwt_key_at_least_32_characters_long
+JWT_EXPIRES_IN=7d
+```
+
+---
+
+## 🚀 Local Development Setup
+
+### 1. Database Setup & Migrations
+Create the PostgreSQL database and run migrations:
+
+```bash
+# Create the database in PostgreSQL
+psql -U postgres -c "CREATE DATABASE veda_setu;"
+
+# Navigate to backend and run migrations
+cd backend
+npm install
+npm run migrate
+```
+
+Database migrations are located in `backend/src/db/migrations/`.
+
+### 2. Start Backend Server
+
+```bash
+# In the backend directory:
+# Development mode with hot-reload (port 5000)
+npm run dev
+
+# Production build
+npm run build
+
+# Start production server
+npm run start
+```
+
+### 3. Start Frontend Web Application
+
+```bash
+# In the root directory:
+# Install dependencies
+npm install
+
+# Start Next.js development server (port 3000)
+npm run dev
+
+# Build Next.js for production
+npm run build
+
+# Start production server
+npm run start
+```
+
+Access the application at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 🧪 Testing & Verification
+
+VEDA SETU includes automated regression test suites and dedicated live E2E verification suites.
+
+### Backend Module Tests (164 / 164 Tests Passing)
+Run from the `backend/` directory:
+
+```bash
+cd backend
+
+# Run the complete regression test suite (164 tests)
+npm run test:all
+
+# Run individual module suites
+npm run test:module1    # Traditional Auth & Password Reset (24 tests)
+npm run test:module2    # Competencies & Skill Assessment Engine (19 tests)
+npm run test:module3    # Opportunities & Skill Matching (29 tests)
+npm run test:module4    # Faculty & Institution Governance (20 tests)
+npm run test:module5    # Mentorship & Faculty Collaboration (34 tests)
+npm run test:module6    # Placements & Digital Portfolio (38 tests)
+```
+
+### Dedicated Live E2E Verification Scripts (against running backend & PostgreSQL)
+```bash
+# Verify Mentorship & Collaboration + Placement Tracking (36 checks)
+node backend/scripts/live-e2e-7c5-7c6.mjs
+
+# Verify Digital Portfolio, Signed Document Streaming & Multi-Tenant Isolation (33 checks)
+node backend/scripts/live-e2e-7c7.mjs
+
+# Verify Super Admin Portal Governance & Platform Analytics (67 checks)
+node backend/scripts/live-e2e-7c11.mjs
+```
+
+---
+
+## 📁 Repository Structure
+
+```
+.
+├── app/                              # Next.js App Router (Pages, Layouts & Server Actions)
+│   ├── auth/                         # Login, Registration, Password Reset & Logout
+│   ├── student/                      # Student Portal (Assessment, Opportunities, Portfolio)
+│   ├── faculty/                      # Faculty Portal (Mentorship, Collaboration Hub)
+│   ├── institution/                  # Institution Portal (Analytics, Faculty & Student Registry)
+│   ├── industry/                     # Industry Portal (Opportunities, Applications & Placements)
+│   └── super-admin/                  # Super Admin Governance & System Roster
+├── components/                       # Reusable UI & Role-Specific Components
+│   ├── ui/                           # shadcn/ui primitives (Button, Card, Dialog, etc.)
+│   ├── layout/                       # DashboardShell, PageHeader, Sidebar navigation
+│   └── [role]/                       # Role-specific widgets, modals & tables
+├── lib/                              # Frontend Utilities & API Client
+│   ├── api.ts                        # Unified REST API client (`api.get`, `api.post`, etc.)
+│   ├── auth.ts                       # Server-side auth helpers (`requireAuth`, `requireRole`)
+│   └── utils.ts                      # Class merging & formatting utilities
+├── proxy.ts                          # Next.js Middleware for Session & Role Redirection
+├── backend/                          # Express.js REST API
+│   ├── src/
+│   │   ├── config/                   # PostgreSQL Pool & Environment Configuration
+│   │   ├── controllers/              # Request Handlers (Auth, Student, Faculty, Industry, etc.)
+│   │   ├── db/
+│   │   │   ├── migrations/           # PostgreSQL DDL Migrations (001 to 008)
+│   │   │   ├── index.ts              # Database Pool & Query Utilities
+│   │   │   └── migrate.ts            # Migration Runner Script
+│   │   ├── middleware/               # Auth, RBAC, Validation & Error Handling
+│   │   ├── routes/                   # Express Route Definitions
+│   │   ├── services/                 # Business Logic & Domain Services
+│   │   ├── storage/                  # Storage Abstraction & Local Disk Provider
+│   │   └── server.ts                 # Express App Initialization & Port Listener
+│   ├── scripts/                      # Automated Regression Tests & Live E2E Scripts
+│   ├── uploads/                      # Local Private Storage Directory
+│   └── package.json                  # Backend Scripts & Dependencies
+├── public/                           # Static assets, logos & icons
+└── README.md                         # Project Documentation
+```
+
+---
+
+## 📄 License
+This project is proprietary and maintained for AYUSH academic, industrial, and clinical education systems.

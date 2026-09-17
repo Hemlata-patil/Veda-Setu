@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { GlobalBackground } from "@/components/layout/global-background";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -9,14 +10,22 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "VEDA SETU — Connecting AYUSH Education with Real-World Opportunities",
+  description:
+    "Bridging traditional Ayurvedic wisdom and modern clinical, research, and industry opportunities. Connecting students, faculty, institutions, and enterprises.",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -25,12 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${cormorant.variable}`}>
+      <body className="min-h-screen bg-transparent text-foreground font-sans antialiased selection:bg-ayush-saffron/20 selection:text-ayush-dark">
+        {/* Unified Global Ayurvedic Background Layer */}
+        <GlobalBackground />
+
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
